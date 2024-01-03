@@ -1,5 +1,5 @@
 # GP-GNN
-
+ 
 Solving graph-defined problems with GNN.
 
 We use Graph Neural Networks to solve problems defined on graph domains 
