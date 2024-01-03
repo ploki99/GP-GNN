@@ -23,6 +23,7 @@ for the complete details.
   * [Conda environment](#conda-environment)
 * [How to run the project](#how-to-run-the-project)
 * [Numerical experiments](#numerical-experiments)
+* [Authors](#authors)
 * [License](#license)
 <!-- TOC -->
 
@@ -132,7 +133,10 @@ We did the following experiments (the number is the same as that you should use 
   You can find the code, the Python notebook, and more information in the folder 
    [`examples/pde_with_gnn`](/examples/pde_with_gnn).
 
-
+## Authors
+- Francesca Behrens ([GitHub](https://github.com/francescabehrens))
+- Paolo Botta ([GitHub](https://github.com/ploki99))
+  
 ## License
 
 Our code is available under the [MIT License](/LICENSE).
