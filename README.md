@@ -21,6 +21,7 @@ for the complete details.
 * [How to install the project](#how-to-install-the-project)
   * [Main dependencies](#main-dependencies)
   * [Conda environment](#conda-environment)
+  * [Troubleshooting](#troubleshooting)
 * [How to run the project](#how-to-run-the-project)
 * [Numerical experiments](#numerical-experiments)
 * [Authors](#authors)
@@ -40,11 +41,12 @@ The main dependencies we used are:
     to easily write and train Graph Neural Networks (GNNs) for a wide range of applications related to structured data.
 * [Matplotlib](https://matplotlib.org/): a comprehensive library for creating static, animated, and interactive 
   visualizations in Python.
-
+  
+To easily install these dependencies, follow the instruction in the next section to create a conda environment.
 
 ### Conda environment 
 We developed our code using [Miniconda](https://docs.conda.io/projects/miniconda/en/latest/).
-Please verify that you have it properly installed on your system before proceeding.
+Please verify that you have it properly installed on your system before proceeding. If it's not installed, follow this [instructions](https://docs.conda.io/projects/miniconda/en/latest/miniconda-install.html).
 
 The first step is to create the conda environment with FEniCS and Python version 3.11 
 (Of course, you can choose the name you prefer for the environment instead of `GP-GNN`)
@@ -82,6 +84,14 @@ conda install -c conda-forge tqdm
 pip install jupyter
 ```
 Finally, you can clone this repository and run the project.
+
+### Troubleshooting
+If the `conda` command returns `conda: command not found`, follow these steps in order:
+1. Verify that conda is actually installed on your system.
+2. If you have just installed it, close and reopen the terminal.
+3. Verify that you have the `conda` environment variable. Check that the line `export PATH="/home/username/miniconda3/bin:$PATH"` is present in `.bashrc` file
+   (of course, make sure to replace `/home/username/miniconda3` with your actual path).
+
 
 ## How to run the project
 First of all, remember to activate the conda environment:
