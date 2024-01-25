@@ -89,9 +89,16 @@ Finally, you can clone this repository and run the project.
 If the `conda` command returns `conda: command not found`, follow these steps in order:
 1. Verify that conda is actually installed on your system.
 2. If you have just installed it, close and reopen the terminal.
-3. Verify that you have the `conda` environment variable. Check that the line `export PATH="/home/username/miniconda3/bin:$PATH"` is present in `.bashrc` file
-   (of course, make sure to replace `/home/username/miniconda3` with your actual path).
-
+3. Verify that you have the `conda` environment variable. To fix it, run the command
+   ```shell
+   export PATH="/home/username/miniconda3/bin:$PATH"
+   ```
+   Where you have to replace `/home/username/miniconda3` with your actual path.
+   If you want to have the environmental variable when you launch your terminal automatically, use
+   ```shell
+   conda init
+   ```
+   which updates the `.bashrc` file.
 
 ## How to run the project
 First of all, remember to activate the conda environment:
