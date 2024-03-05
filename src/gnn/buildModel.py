@@ -39,22 +39,21 @@ class BuildModel:
         # Define scheduler to reduce automatically the learning rate
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, patience=20, verbose=True)
         # Link model to device
-        device = (
+        self.device = (
             "cuda"
             if torch.cuda.is_available()
             else "mps"
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.model.to(device)
+        self.model.to(self.device)
         # Set double precision
         self.model.to(torch.double)
 
     def __call__(self, *args, **kwargs):
         return self.model(*args, **kwargs)
 
-    @staticmethod
-    def loss_fn(x, y, index, batch_size):
+    def loss_fn(self, x, y, index, batch_size):
         """
         Custom loss function used: MSE along each batch and then mean on the batches.
         :param x: torch tensor of computed values of shape (n_item, 1)
@@ -68,7 +67,7 @@ class BuildModel:
         :return: computed loss
         """
         src = torch.flatten(torch.square(x - y))
-        inp = torch.zeros(batch_size, dtype=torch.float64)
+        inp = torch.zeros(batch_size, dtype=torch.float64, device=self.device)
         out = inp.scatter_reduce(0, index, src, reduce="mean", include_self=False)
         return torch.mean(out)
 
@@ -82,6 +81,8 @@ class BuildModel:
         running_loss = 0.0
         pbar = tqdm(self.training_loader, ncols=100, file=sys.stdout, desc=f"EPOCH {epoch:3}")
         for data in pbar:
+            # Link data to device
+            data = data.to(self.device)
             # Zero your gradients for every batch
             self.optimizer.zero_grad()
             # Make predictions for this batch
@@ -127,9 +128,11 @@ class BuildModel:
             # Disable gradient computation and reduce memory consumption.
             with torch.no_grad():
                 for i, val_data in enumerate(self.validation_loader):
+                    # Link data to device
+                    val_data = val_data.to(self.device)
                     val_outputs = self.model(val_data.x, val_data.edge_index, val_data.edge_attr)
                     val_loss = self.loss_fn(val_outputs, val_data.y, val_data.batch, val_data.batch_size)
-                    running_val_loss += val_loss
+                    running_val_loss += val_loss.item()
 
             avg_val_loss = running_val_loss / len(self.validation_loader)
 
@@ -165,6 +168,7 @@ class BuildModel:
         Print the summary of the model.
         """
         d = next(iter(self.training_loader))
+        d = d.to(self.device)
         summary(self.model, [d.x, d.edge_index, d.edge_attr])
 
     def print_all_parameters(self):
@@ -204,9 +208,11 @@ class BuildModel:
         print("\nTesting graph neural network:")
         num = 1
         for data in testing_loader:
+            # Link data to device
+            data = data.to(self.device)
             # Compute model output
             out = self.model(data.x, data.edge_index, data.edge_attr)
-            inp = torch.zeros(data.batch_size, dtype=torch.float64)
+            inp = torch.zeros(data.batch_size, dtype=torch.float64, device=self.device)
             # Compute loss value
             square_diff = torch.flatten(torch.square(out - data.y))
             test_loss = inp.scatter_reduce(0, data.batch, square_diff, reduce="mean", include_self=False)
